@@ -1,0 +1,61 @@
+package qyapi
+
+import (
+	"net/http"
+
+	"qyapi_weixin/pkg/config"
+	"qyapi_weixin/pkg/department"
+	"qyapi_weixin/pkg/token"
+	"qyapi_weixin/pkg/user"
+)
+
+// QyClient 企业微信客户端
+type QyClient struct {
+	config      *config.Config
+	client      *http.Client
+	TokenClient *token.Client
+	Token       string
+	deptClient  *department.Client
+	userClient  *user.Client
+}
+
+// NewQyClient 创建企业微信客户端
+func NewQyClient(corpID, corpSecret string) (*QyClient, error) {
+	cfg := config.NewConfig(corpID, corpSecret)
+	client := http.DefaultClient
+	tokenClient := token.NewClient(client, cfg)
+	token, err := tokenClient.GetToken()
+	if err != nil {
+		return nil, err
+	}
+	deptClient := department.NewClient(client, &token)
+	userClient := user.NewClient(client, &token)
+	return &QyClient{
+		config:      cfg,
+		client:      client,
+		TokenClient: tokenClient,
+		Token:       token,
+		deptClient:  deptClient,
+		userClient:  userClient,
+	}, nil
+}
+
+// GetAllDepartments 获取所有部门详情
+func (c *QyClient) GetAllDepartments() ([]department.Department, error) {
+	return c.deptClient.ListAll()
+}
+
+// GetDepartmentByID 根据 ID 获取部门
+func (c *QyClient) GetDepartmentByID(deptID int64) (*department.Department, error) {
+	return c.deptClient.GetByID(deptID)
+}
+
+// GetUsersByDeptID 获取指定部门的成员列表（详细信息）
+func (c *QyClient) GetUsersByDeptID(deptID int64) ([]user.User, error) {
+	return c.userClient.ListByDept(deptID)
+}
+
+// GetUserByUserID 根据 UserID 获取成员详情
+func (c *QyClient) GetUserByUserID(userID string) (*user.User, error) {
+	return c.userClient.GetByUserID(userID)
+}
