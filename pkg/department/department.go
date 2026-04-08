@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"qyapi_weixin/pkg/errorx"
+	"github.com/hejingwen098/qyapi_weixin/pkg/errorx"
 )
 
 const (

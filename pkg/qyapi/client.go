@@ -3,10 +3,10 @@ package qyapi
 import (
 	"net/http"
 
-	"qyapi_weixin/pkg/config"
-	"qyapi_weixin/pkg/department"
-	"qyapi_weixin/pkg/token"
-	"qyapi_weixin/pkg/user"
+	"github.com/hejingwen098/qyapi_weixin/pkg/config"
+	"github.com/hejingwen098/qyapi_weixin/pkg/department"
+	"github.com/hejingwen098/qyapi_weixin/pkg/token"
+	"github.com/hejingwen098/qyapi_weixin/pkg/user"
 )
 
 // QyClient 企业微信客户端

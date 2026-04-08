@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"qyapi_weixin/pkg/qyapi"
+	"github.com/hejingwen098/qyapi_weixin/pkg/qyapi"
 )
 
 func main() {

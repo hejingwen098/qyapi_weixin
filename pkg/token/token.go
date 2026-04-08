@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"qyapi_weixin/pkg/config"
+	"github.com/hejingwen098/qyapi_weixin/pkg/config"
 )
 
 const (
