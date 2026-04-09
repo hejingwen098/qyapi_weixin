@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/hejingwen098/qyapi_weixin/pkg/config"
 	"github.com/hejingwen098/qyapi_weixin/pkg/qyapi"
 )
 
@@ -13,9 +14,15 @@ func main() {
 
 	corpID := flag.String("corpid", "your_corp_id", "Corp ID")
 	corpSecret := flag.String("corpsecret", "your_corp_secret", "Corp Secret")
+	proxy := flag.String("proxy", "", "Proxy URL")
 	flag.Parse()
 	// 创建客户端,并认证
-	client, err := qyapi.NewQyClient(*corpID, *corpSecret)
+	cfg := config.Config{
+		CorpID:     *corpID,
+		CorpSecret: *corpSecret,
+		Proxy:      *proxy,
+	}
+	client, err := qyapi.NewQyClient(&cfg)
 	if err != nil {
 		log.Fatalf("创建客户端失败：%v", err)
 	}

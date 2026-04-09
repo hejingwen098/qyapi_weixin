@@ -2,6 +2,7 @@ package qyapi
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/hejingwen098/qyapi_weixin/pkg/config"
 	"github.com/hejingwen098/qyapi_weixin/pkg/department"
@@ -20,9 +21,16 @@ type QyClient struct {
 }
 
 // NewQyClient 创建企业微信客户端
-func NewQyClient(corpID, corpSecret string) (*QyClient, error) {
-	cfg := config.NewConfig(corpID, corpSecret)
+func NewQyClient(cfg *config.Config) (*QyClient, error) {
 	client := http.DefaultClient
+	if cfg.Proxy != "" {
+		proxyURL, _ := url.Parse(cfg.Proxy)
+		transport := &http.Transport{
+			Proxy: http.ProxyURL(proxyURL),
+		}
+		client.Transport = transport
+	}
+
 	tokenClient := token.NewClient(client, cfg)
 	token, err := tokenClient.GetToken()
 	if err != nil {
