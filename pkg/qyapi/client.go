@@ -6,18 +6,20 @@ import (
 
 	"github.com/hejingwen098/qyapi_weixin/pkg/config"
 	"github.com/hejingwen098/qyapi_weixin/pkg/department"
+	"github.com/hejingwen098/qyapi_weixin/pkg/message"
 	"github.com/hejingwen098/qyapi_weixin/pkg/token"
 	"github.com/hejingwen098/qyapi_weixin/pkg/user"
 )
 
 // QyClient 企业微信客户端
 type QyClient struct {
-	Config      *config.Config
-	Client      *http.Client
-	TokenClient *token.Client
-	Token       string
-	DeptClient  *department.Client
-	UserClient  *user.Client
+	Config        *config.Config
+	Client        *http.Client
+	TokenClient   *token.Client
+	Token         string
+	DeptClient    *department.Client
+	UserClient    *user.Client
+	MessageClient *message.Client
 }
 
 // NewQyClient 创建企业微信客户端
@@ -38,13 +40,15 @@ func NewQyClient(cfg *config.Config) (*QyClient, error) {
 	}
 	deptClient := department.NewClient(client, &token)
 	userClient := user.NewClient(client, &token)
+	messageClient := message.NewClient(client, &token)
 	return &QyClient{
-		Config:      cfg,
-		Client:      client,
-		TokenClient: tokenClient,
-		Token:       token,
-		DeptClient:  deptClient,
-		UserClient:  userClient,
+		Config:        cfg,
+		Client:        client,
+		TokenClient:   tokenClient,
+		Token:         token,
+		DeptClient:    deptClient,
+		UserClient:    userClient,
+		MessageClient: messageClient,
 	}, nil
 }
 
@@ -71,4 +75,9 @@ func (c *QyClient) GetSimpleUsersByDeptID(deptID int64) ([]user.SimpleUser, erro
 // GetUserByUserID 根据 UserID 获取成员详情
 func (c *QyClient) GetUserByUserID(userID string) (*user.User, error) {
 	return c.UserClient.GetByUserID(userID)
+}
+
+// SendMessage 发送消息
+func (c *QyClient) SendMessage(msgType string, content interface{}) (string, error) {
+	return c.MessageClient.SendMessage(msgType, content)
 }

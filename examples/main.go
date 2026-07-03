@@ -43,6 +43,25 @@ func main() {
 		}
 	}
 	fmt.Println()
+
+	// 示例: 发送文本消息
+	textMessage := map[string]interface{}{
+		"touser":  "UserID1|UserID2",   // 接收消息的成员ID列表，多个用|分隔
+		"toparty": "PartyID1|PartyID2", // 接收消息的部门ID列表，多个用|分隔
+		"totag":   "TagID1|TagID2",     // 接收消息的标签ID列表，多个用|分隔
+		"agentid": 1000002,             // 企业应用的id
+		"text": map[string]interface{}{
+			"content": "你的奖励已经到账，请前往微信查看",
+		},
+	}
+
+	response, err := client.SendMessage("text", textMessage)
+	if err != nil {
+		log.Printf("发送消息失败：%v", err)
+	} else {
+		fmt.Printf("消息发送成功，响应：%s\n", response)
+	}
+
 	err = client.TokenClient.Logout(client.Token)
 	if err != nil {
 		log.Fatalf("Logout failed: %v", err)
